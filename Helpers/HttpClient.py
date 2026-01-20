@@ -1,21 +1,15 @@
-import http.client
-
+import requests
+from Entities.Teams import Teams
 class HttpClient:
-    url = ""
-    def __init__(self, url):
-        self.url = url
-    
-    def Get(self, path):
-        headers = {
+
+    BASE_URL = "https://hockey1.p.rapidapi.com/v1/nhl/"
+
+    headers = {
         'x-rapidapi-key': "72181f6b35msh7952d7f58c76fd8p16d1c1jsnb93bb1a6feb7",
         'x-rapidapi-host': "hockey1.p.rapidapi.com"
-        }
-        conn = http.client.HTTPSConnection(self.url)
-
-        conn.request("GET", path, headers=headers)
-
-        res = conn.getresponse()
-        return res.read().decode("utf-8")
-    
-    def Test(a, b):
-        return b+1
+    }
+    def GetTeams(self):
+        url = "teams"
+        response = requests.get(HttpClient.BASE_URL + url, headers=HttpClient.headers)
+        teams = Teams.from_json(response.text)
+        return teams
